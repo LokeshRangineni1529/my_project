@@ -53,3 +53,7 @@ fig = px.scatter(
 fig.update_traces(textposition="top center", marker=dict(size=10))
 fig.update_layout(template="plotly_white")
 plotly(fig)
+
+# Start the server
+from preswald import start_server
+start_server()
