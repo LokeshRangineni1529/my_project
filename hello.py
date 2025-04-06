@@ -1,11 +1,4 @@
 from preswald import text, plotly, connect, get_df, table, slider, query, button
-import ssl
-import certifi
-
-# Set default SSL context with certifi's CA bundle
-ssl_context = ssl.create_default_context(cafile=certifi.where())
-ssl._create_default_https_context = ssl._create_unverified_context  # Optional: Skips verification (not recommended for production)
-
 import pandas as pd
 import plotly.express as px
 import random
