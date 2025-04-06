@@ -1,3 +1,13 @@
-secrets.toml
-.preswald_deploy
+# Ignore virtual environment folder
+venv/
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+
+# Ignore environment files
 .env.structured
+secrets.toml
+
+# Ignore deployment files
+.preswald_deploy
