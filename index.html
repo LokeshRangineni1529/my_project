@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ICC World Cup 2023 Batting Analysis</title>
+    <title>🏏 ICC World Cup 2023 - Batting Analysis</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         table, th, td {
@@ -16,35 +16,51 @@
 <body>
     <h1>🏏 ICC World Cup 2023 - Batting Analysis App</h1>
     <p>Explore players who scored more than 50 runs in the tournament.</p>
-    <div id="chartContainer">
-        <canvas id="runsChart" width="400" height="200"></canvas>
-    </div>
-    <div>
-        <h3>Filtered Data: Players with Runs > 50</h3>
-        <table id="playersTable">
-            <tr>
-                <th>Player</th>
-                <th>Runs</th>
-                <th>Balls</th>
-                <th>Team</th>
-            </tr>
-        </table>
-    </div>
+
+    <!-- Table to display player data -->
+    <h3>Filtered Data: Players with Runs > 50</h3>
+    <table id="playersTable">
+        <tr>
+            <th>Player</th>
+            <th>Runs</th>
+            <th>Balls</th>
+            <th>Team</th>
+        </tr>
+    </table>
+
+    <!-- Slider to filter players -->
+    <h3>Filter Players by Minimum Runs:</h3>
+    <input type="range" id="minRuns" min="0" max="200" value="50" onchange="filterData()">
+    <span id="minRunsValue">50</span>
+
+    <!-- Chart for batting analysis -->
+    <canvas id="runsChart" width="400" height="200"></canvas>
 
     <script>
-        // Fetch data from Heroku API
-        fetch('https://your-heroku-app.herokuapp.com/api/players')
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);  // Display fetched data in the console
-                displayTable(data);
-                renderChart(data);
-            })
-            .catch(error => console.error('Error fetching data:', error));
+        // Sample Data (you can replace this with dynamic data)
+        const playersData = [
+            {player: "Player1", runs: 120, balls: 100, team: "Team A"},
+            {player: "Player2", runs: 75, balls: 85, team: "Team B"},
+            {player: "Player3", runs: 50, balls: 60, team: "Team A"},
+            {player: "Player4", runs: 150, balls: 120, team: "Team B"},
+            {player: "Player5", runs: 30, balls: 45, team: "Team A"},
+        ];
+
+        // Function to display players in table based on selected filter
+        function filterData() {
+            const minRuns = document.getElementById("minRuns").value;
+            document.getElementById("minRunsValue").textContent = minRuns;
+
+            const filteredData = playersData.filter(player => player.runs >= minRuns);
+            displayTable(filteredData);
+            renderChart(filteredData);
+        }
 
         // Function to display data in table
         function displayTable(data) {
-            const table = document.getElementById('playersTable');
+            const table = document.getElementById("playersTable");
+            table.innerHTML = "<tr><th>Player</th><th>Runs</th><th>Balls</th><th>Team</th></tr>";  // Reset table
+
             data.forEach(player => {
                 const row = table.insertRow();
                 row.insertCell(0).textContent = player.player;
@@ -54,22 +70,22 @@
             });
         }
 
-        // Function to render chart
+        // Function to render chart based on filtered data
         function renderChart(data) {
-            const ctx = document.getElementById('runsChart').getContext('2d');
+            const ctx = document.getElementById("runsChart").getContext("2d");
             const chartData = {
                 labels: data.map(player => player.player),
                 datasets: [{
-                    label: 'Runs Scored',
+                    label: "Runs Scored",
                     data: data.map(player => player.runs),
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: "rgba(75, 192, 192, 0.2)",
+                    borderColor: "rgba(75, 192, 192, 1)",
                     borderWidth: 1
                 }]
             };
 
             new Chart(ctx, {
-                type: 'bar',
+                type: "bar",
                 data: chartData,
                 options: {
                     scales: {
@@ -80,6 +96,9 @@
                 }
             });
         }
+
+        // Initial render of the table and chart with default filter (runs > 50)
+        filterData();
     </script>
 </body>
 </html>
