@@ -1,4 +1,11 @@
 from preswald import text, plotly, connect, get_df, table, slider, query, button
+import ssl
+import certifi
+
+# Set default SSL context with certifi's CA bundle
+ssl_context = ssl.create_default_context(cafile=certifi.where())
+ssl._create_default_https_context = ssl._create_unverified_context  # Optional: Skips verification (not recommended for production)
+
 import pandas as pd
 import plotly.express as px
 import random
@@ -46,3 +53,6 @@ fig = px.scatter(
 fig.update_traces(textposition="top center", marker=dict(size=10))
 fig.update_layout(template="plotly_white")
 plotly(fig)
+
+# Make sure to call start_server() to initialize the Preswald server
+start_server()  # Add this line
