@@ -3,10 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Project</title>
+    <title>ICC World Cup 2023 Batting Analysis</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 8px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to My Project</h1>
-    <p>This is the homepage of my project hosted on GitHub Pages!</p>
+    <h1>🏏 ICC World Cup 2023 - Batting Analysis App</h1>
+    <p>Explore players who scored more than 50 runs in the tournament.</p>
+    <div id="chartContainer">
+        <canvas id="runsChart" width="400" height="200"></canvas>
+    </div>
+    <div>
+        <h3>Filtered Data: Players with Runs > 50</h3>
+        <table id="playersTable">
+            <tr>
+                <th>Player</th>
+                <th>Runs</th>
+                <th>Balls</th>
+                <th>Team</th>
+            </tr>
+        </table>
+    </div>
+
+    <script>
+        // Fetch data from Heroku API
+        fetch('https://your-heroku-app.herokuapp.com/api/players')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);  // Display fetched data in the console
+                displayTable(data);
+                renderChart(data);
+            })
+            .catch(error => console.error('Error fetching data:', error));
+
+        // Function to display data in table
+        function displayTable(data) {
+            const table = document.getElementById('playersTable');
+            data.forEach(player => {
+                const row = table.insertRow();
+                row.insertCell(0).textContent = player.player;
+                row.insertCell(1).textContent = player.runs;
+                row.insertCell(2).textContent = player.balls;
+                row.insertCell(3).textContent = player.team;
+            });
+        }
+
+        // Function to render chart
+        function renderChart(data) {
+            const ctx = document.getElementById('runsChart').getContext('2d');
+            const chartData = {
+                labels: data.map(player => player.player),
+                datasets: [{
+                    label: 'Runs Scored',
+                    data: data.map(player => player.runs),
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            };
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: chartData,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+    </script>
 </body>
 </html>
